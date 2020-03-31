@@ -20,3 +20,5 @@ flags.DEFINE_integer('early_stopping', 10, 'Tolerance for early stopping (# of e
 
 #load Data from utils.py
 adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data(FLAGS.dataset) 
+print(y_train)
+print(train_mask)
