@@ -2,6 +2,7 @@ import time
 import tensorflow as tf 
 
 from utils import *
+from models import GCN
 
 seed = 123
 np.random.seed(seed)
@@ -28,3 +29,16 @@ features = preprocess_features(features)
 support = [preprocess_adj(adj)]
 num_supports = 1
 model_func = GCN
+
+placeholders = {
+    'support': [tf.sparse_placeholder(tf.float32) for _ in range(num_supports)],
+    'features': tf.sparse_placeholder(tf.float32, shape=tf.constant(features[2], dtype=tf.int64)),
+    'labels': tf.placeholder(tf.float32, shape=(None, y_train.shape[1])),
+    'labels_mask': tf.placeholder(tf.int32),
+    'dropout': tf.placeholder_with_default(0., shape=()),
+    'num_features_nonzero': tf.placeholder(tf.int32)  # helper variable for sparse dropout
+}
+
+model = model_func(placeholders, input_dim=features[2][1], logging=True)
+
+sess = tf.Session()
