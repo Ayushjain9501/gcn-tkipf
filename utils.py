@@ -102,3 +102,14 @@ def preprocess_adj(adj):
     """Preprocessing of adjacency matrix for simple GCN model and conversion to tuple representation."""
     adj_normalized = normalize_adj(adj + sp.eye(adj.shape[0]))
     return sparse_to_tuple(adj_normalized)
+
+
+def construct_feed_dict(features, support, labels, labels_mask, placeholders):
+    """Construct feed dictionary."""
+    feed_dict = dict()
+    feed_dict.update({placeholders['labels']: labels})
+    feed_dict.update({placeholders['labels_mask']: labels_mask})
+    feed_dict.update({placeholders['features']: features})
+    feed_dict.update({placeholders['support'][i]: support[i] for i in range(len(support))})
+    feed_dict.update({placeholders['num_features_nonzero']: features[1].shape})
+    return feed_dict
